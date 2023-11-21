@@ -1,6 +1,6 @@
 {% extends 'base.html'%} {% block content %}
-<form action="{% url 'task_add' %}" method="POST" >
-  
+<form action="{% url 'task_add' %}" method="POST">
+  {% csrf_token %}
   <div class="mb-3 mt-3">
     <label for="task" class="form-label">Task Name:</label>
     <input
