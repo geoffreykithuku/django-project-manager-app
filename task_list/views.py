@@ -1,9 +1,10 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from task_list.models import Task
 from task_list.form import TaskForm
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 def index(request):
@@ -37,3 +38,18 @@ def task_add(request):
     form = TaskForm()
         
     return render(request, 'form.html', {'form': form})
+
+def delete(request, id):
+    task = get_object_or_404(Task, pk=id)
+    
+    task.delete()
+    messages.success(request, 'Task deleted successfully')
+    return redirect('tasks')
+
+def edit(request, id):
+    task = get_object_or_404(Task, pk=id)
+    task.completed = not task.completed
+    task.save()
+    messages.success(request, 'Task edited successfully')
+    return redirect('tasks')
+    

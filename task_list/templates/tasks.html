@@ -2,22 +2,27 @@
 <h1>Tasks</h1>
 <p>Tasks list page</p>
 <table class="table table-responsive table-bordered table-hover">
-  <thead class='table-dark'>
+  <thead class="table-dark">
     <tr>
-       
-        <th scope="col">Task Name</th>
-    
-        <th scope="col">Task Status</th>
+      <th scope="col">Task Name</th>
+
+      <th scope="col">Task Status</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
     {% for task in tasks %}
     <tr>
-      
       <td>{{ task.title }}</td>
       <td>{{ task.completed }}</td>
-      
-     
+      <td>
+        <a href="{% url 'edit' task.id %}" class="btn btn-primary">
+          {% if task.completed %} Mark as Uncompleted {% else %} Mark as
+          Completed {% endif %}
+        </a>
+
+        <a href="{% url 'delete' task.id %}" class="btn btn-danger">Delete</a>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
