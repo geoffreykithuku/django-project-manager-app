@@ -1,4 +1,26 @@
 {% extends 'base.html' %} {% block content %}
 <h1>Tasks</h1>
 <p>Tasks list page</p>
+<table class="table table-responsive table-bordered table-hover">
+  <thead class='table-dark'>
+    <tr>
+       
+        <th scope="col">Task Name</th>
+    
+        <th scope="col">Task Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for task in tasks %}
+    <tr>
+      
+      <td>{{ task.title }}</td>
+      <td>{{ task.completed }}</td>
+      
+     
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %} {% block title%} Task List {% endblock %}
