@@ -15,22 +15,32 @@ def home(request):
 def project_list(request):
     projects = Project.objects.all()
     
+    pagination = Paginator(projects, 3)
+    page = request.GET.get('page')
+    projectsObj = pagination.get_page(page)
+    
+    
     all_projects = []
     
-    for project in projects:
+    for project in projectsObj:
         data = {}
 
         data['item'] = project
         data['all'] = project.tasks.all().count()
         data['complete'] = project.tasks.filter(completed=True).count()
         data['incomplete'] = project.tasks.filter(completed=False).count()
-        data['percent'] = round((data['complete'] / data['all']) * 100)
+        if data['all'] > 0:
+           data['percent'] = round((data['complete'] / data['all']) * 100)
+        else:
+           data['percent'] = 0
+           
         data['days_left'] = (project.due_date - datetime.date.today()).days
 
         all_projects.append(data) 
-        print(data['days_left'])
-
-    return render(request, 'project_list.html', {'projects': all_projects})
+        
+    
+    
+    return render(request, 'project_list.html', {'projects': all_projects, 'pages': projectsObj})
 
 def project_create(request):
     if request.method == 'POST':

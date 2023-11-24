@@ -1,6 +1,48 @@
 {% extends 'base.html' %} {% load humanize %} {% block content %}
 <div class="container mt-5">
-  <h1>Project List</h1>
+  <h3 class="text-primary">Project List</h3>
+  <div class="d-flex justify-content-between flex-wrap">
+    <div class="col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <p class="card-text">
+            <em>Create a New Project</em>
+          </p>
+          <a href="{% url 'project_create' %}" class="btn btn-success"
+            >Create Project</a
+          >
+        </div>
+      </div>
+    </div>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-end ms-auto">
+        <li class="page-item"><a class="page-link" href="?page=1"><<</a></li>
+        {% if pages.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{pages.previous_page_number}}"
+            >{{pages.previous_page_number}}</a
+          >
+        </li>
+        {% endif %}
+
+        <li class="page-item">
+          <a class="page-link" href="?page={{pages.number}}"
+            >{{ pages.number}}</a
+          >
+        </li>
+        {% if pages.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{pages.next_page_number}}"
+            >{{pages.next_page_number}}</a
+          >
+        </li>
+        {% endif %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{pages.num_pages}}">>></a>
+        </li>
+      </ul>
+    </nav>
+  </div>
   <div class="row">
     {% for project in projects %}
     <div class="col-md-4 mb-4">
@@ -48,20 +90,6 @@
       </div>
     </div>
     {% endfor %}
-
-    <!-- Link to create a new project -->
-    <div class="col-md-4 mb-4">
-      <div class="card shadow">
-        <div class="card-body">
-          <p class="card-text">
-            <em>Create a New Project</em>
-          </p>
-          <a href="{% url 'project_create' %}" class="btn btn-success"
-            >Create Project</a
-          >
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 {% endblock %}
