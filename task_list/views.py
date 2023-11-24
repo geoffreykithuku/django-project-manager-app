@@ -1,3 +1,4 @@
+import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
@@ -14,7 +15,22 @@ def home(request):
 def project_list(request):
     projects = Project.objects.all()
     
-    return render(request, 'project_list.html', {'projects': projects})
+    all_projects = []
+    
+    for project in projects:
+        data = {}
+
+        data['item'] = project
+        data['all'] = project.tasks.all().count()
+        data['complete'] = project.tasks.filter(completed=True).count()
+        data['incomplete'] = project.tasks.filter(completed=False).count()
+        data['percent'] = round((data['complete'] / data['all']) * 100)
+        data['days_left'] = (project.due_date - datetime.date.today()).days
+
+        all_projects.append(data) 
+        print(data['days_left'])
+
+    return render(request, 'project_list.html', {'projects': all_projects})
 
 def project_create(request):
     if request.method == 'POST':
@@ -30,13 +46,32 @@ def project_create(request):
 def project_detail(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     tasks = project.tasks.all()
-    return render(request, 'project_detail.html', {'project': project, 'tasks': tasks})
+    pagination = Paginator(tasks, 5)
+    page_number = request.GET.get('page')
+    page_obj = pagination.get_page(page_number)
+    
+    return render(request, 'project_detail.html', {'project': project, 'tasks': page_obj})
 
 def project_delete(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     project.delete()
     return redirect('project_list')
 
+def project_update(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            
+            project.save()
+            return redirect('project_detail', project_id=project_id)
+        else:
+            messages.error(request, 'Please correct the error below.')
+            print(form.errors)
+    
+        
+    return render(request, 'project_form.html', {'project': project} )
 
 def task_list(request, project_id):
     project = get_object_or_404(Project, pk=project_id)

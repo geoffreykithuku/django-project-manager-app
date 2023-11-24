@@ -6,21 +6,41 @@
     <div class="col-md-4 mb-4">
       <div class="card shadow">
         <div class="card-body">
-          <p class="card-text">
-            Due Date: {{ project.due_date | date:"m-d-Y" }}
-          </p>
-          <h5 class="card-title">{{ project.title }}</h5>
+          <span class="d-flex justify-content-between">
+            <p class="card-text">
+              Due Date: {{ project.item.due_date | date:"m-d-Y" }}
+            </p>
+            <p>
+              {% if project.percent < 100 and project.days_left < 3 %}
+              <span class="badge bg-danger"
+                >{{ project.days_left }} days left</span
+              >
+              {% elif project.percent == 100 %}
+              <span class="badge bg-info"
+                >{{ project.days_left }} days left</span
+              >
+              {% elif project.percent < 100 and project.days_left > 5 %}
+              <span class="badge bg-warning"
+                >{{ project.days_left }} days left</span
+              >
 
-          <p class="card-text">
-            Total Tasks: {{ project.tasks.count }}
-          </p>
+              {% endif %}
+            </p>
+          </span>
 
+          <h5 class="card-title">{{ project.item.title }}</h5>
+
+          <div class="progress mb-3 mt-3">
+            <div class="progress-bar" style="width: {{project.percent}}%">
+              {{project.percent}}%
+            </div>
+          </div>
           <p class="card-text">
-            Total Tasks: {{ project.tasks.count }}
+            {{ project.complete }} of {{ project.all }} tasks completed
           </p>
 
           <a
-            href="{% url 'project_detail' project_id=project.id %}"
+            href="{% url 'project_detail' project_id=project.item.id %}"
             class="btn btn-primary"
             >View Project</a
           >
