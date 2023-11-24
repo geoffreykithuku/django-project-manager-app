@@ -1,0 +1,36 @@
+{% extends 'base.html'%} {% block content %}
+<form
+ 
+  action="{% url 'task_create' project_id=project.id %}"
+ 
+  method="POST"
+>
+  {% csrf_token %}
+  <div class="mb-3 mt-3">
+    <label for="title" class="form-label">Task Name:</label>
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      placeholder="Enter task"
+      name="title" 
+
+    <label for="due_date" class="form-label">Due Date:</label>
+    <input
+      type="date"
+      class="form-control"
+      id="due_date"
+      name="due_date" 
+  </div>
+
+  <button type="submit" class="btn btn-primary">Create task</button>
+
+  <!-- Cancel button to go back to the project detail page -->
+  <a
+    href="{% url 'project_detail' project_id=project.id %}"
+    class="btn btn-secondary"
+    >Cancel</a
+  >
+</form>
+
+{% endblock %}

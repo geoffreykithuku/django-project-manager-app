@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<div class="container mt-5">
+  <h1>{{ project.title }}</h1>
+  <p>Due Date: {{ project.due_date | date:"m-d-Y" }}</p>
+  <p>Description: {{ project.description }}</p>
+
+  <h2>Tasks</h2>
+  <table class="table table-responsive">
+    <thead>
+      <tr>
+        <th scope="col">Task Name</th>
+        <th scope="col">Due Date</th>
+        <th scope="col">Completed</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in tasks %}
+      <tr>
+        <td>{{ task.title }}</td>
+        <td>{{ task.due_date|date:"m-d-Y" }}</td>
+        <td>{% if task.completed %}Yes{% else %}No{% endif %}</td>
+        <td>
+         
+          <a
+            href="{% url 'task_update' project_id=project.id task_id=task.id %}"
+            class="btn btn-warning btn-sm"
+            >Update</a
+          >
+          <a
+            href="{% url 'task_delete' project_id=project.id task_id=task.id %}"
+            class="btn btn-danger btn-sm"
+            >Delete Task</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Button to delete the project -->
+  <button
+    type="button"
+    class="btn btn-danger mt-3"
+    data-bs-toggle="modal"
+    data-bs-target="#deleteProjectModal"
+  >
+    Delete Project
+  </button>
+
+  <!-- Modal for project deletion confirmation -->
+  <div
+    class="modal fade"
+    id="deleteProjectModal"
+    tabindex="-1"
+    aria-labelledby="deleteProjectModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteProjectModalLabel">
+            Confirm Deletion
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Are you sure you want to delete the project "{{ project.title }}"?
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <a
+            href="{% url 'project_delete' project_id=project.id %}"
+            class="btn btn-danger"
+            >Delete Project</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a
+    href="{% url 'task_create' project_id=project.id %}"
+    class="btn btn-success mt-3"
+    >Add New Task</a
+  >
+
+  <a href="{% url 'project_list' %}" class="btn btn-secondary mt-3"
+    >Back to Project List</a
+  >
+</div>
+{% endblock %}

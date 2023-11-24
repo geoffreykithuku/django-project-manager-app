@@ -1,0 +1,47 @@
+{% extends 'base.html'%} {% load humanize %} {% block content %}
+<form action="{% url 'task_update' project_id task.id %}" method="POST">
+  {% csrf_token %}
+  <div class="mb-3 mt-3">
+    <h1>Update task</h1>
+    <div class="mb-3">
+      <label for="title" class="form-label">Title:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        value="{{ task.title }}"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="due_date" class="form-label">Due date:</label>
+      <input
+        type="date"
+        class="form-control"
+        id="due_date"
+        name="due_date"
+        value="{{ task.due_date | date:'Y-m-d' }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="completed" class="form-label">Completed:</label>
+      <select class="form-select" id="completed" name="completed">
+        <option value="True" {% if task.completed %} selected {% endif %}>
+          True
+        </option>
+        <option value="False" {% if not task.completed %} selected {% endif %}>
+          False
+        </option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Update task</button>
+
+    <!-- Cancel button to go back to the project detail page -->
+    <a href="{% url 'project_detail' project_id %}" class="btn btn-secondary"
+      >Cancel</a
+    >
+  </div>
+</form>
+
+{% endblock %}

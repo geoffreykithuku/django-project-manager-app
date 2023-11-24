@@ -1,59 +1,88 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-from task_list.models import Task
-from task_list.form import TaskForm
+from task_list.models import Task, Project
+from task_list.app_forms import TaskForm, ProjectForm
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 # Create your views here.
 
-def index(request):
-    return render(request, 'tasklist.html')
+def home(request):
+    return render(request, 'home.html')
 
-def contact(request):
-    return render(request, 'contact.html')
+def project_list(request):
+    projects = Project.objects.all()
+    
+    return render(request, 'project_list.html', {'projects': projects})
 
-def about(request):
-    return render(request, 'about.html')
+def project_create(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('project_list')
+    else:
+        form = ProjectForm()
 
-def tasks(request):
-    all_tasks = Task.objects.all()
-    paginator = Paginator(all_tasks, 5)
-    page = request.GET.get('page')
-    data  = paginator.get_page(page)
-    context = {
-        'tasks': data
-    }
-    return render(request, 'tasks.html', context)
+    return render(request, 'project_form.html', {'form': form})
 
-def task_add(request):
+def project_detail(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    tasks = project.tasks.all()
+    return render(request, 'project_detail.html', {'project': project, 'tasks': tasks})
+
+def project_delete(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    project.delete()
+    return redirect('project_list')
+
+
+def task_list(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    tasks = project.tasks.all()
+    return render(request, 'task_list.html', {'project': project, 'tasks': tasks})
+
+def task_detail(request, project_id, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    return render(request, 'task_detail.html', {'task': task})
+
+def task_create(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
     
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Task added successfully')
-           
+            task = form.save(commit=False)
+            task.project = project
+            task.save()
+            return redirect('project_detail', project_id=project_id)
         else:
-            messages.error(request, 'Error adding task')
-            return render(request, 'form.html', {'form': form})
-       
-    form = TaskForm()
+            messages.error(request, 'Please correct the error below.')
+            print(form.errors)
+    else:
         
-    return render(request, 'form.html', {'form': form})
+        form = TaskForm()
 
-def delete(request, id):
-    task = get_object_or_404(Task, pk=id)
+    return render(request, 'task_form.html', {'form': form, 'project': project})
+
+def task_update(request, project_id, task_id):
+    task = get_object_or_404(Task, pk=task_id)
     
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            
+            task.save()
+            return redirect('project_detail', project_id=project_id)
+        else:
+            messages.error(request, 'Please correct the error below.')
+            print(form.errors)
+    
+        
+    return render(request, 'task_edit.html', {'task': task, 'project_id': project_id} )
+                                                  
+def task_delete(request, project_id, task_id):
+    task = get_object_or_404(Task, pk=task_id)
     task.delete()
-    messages.success(request, 'Task deleted successfully')
-    return redirect('tasks')
-
-def edit(request, id):
-    task = get_object_or_404(Task, pk=id)
-    task.completed = not task.completed
-    task.save()
-    messages.success(request, 'Task edited successfully')
-    return redirect('tasks')
-    
+    return redirect('project_detail', project_id=project_id)

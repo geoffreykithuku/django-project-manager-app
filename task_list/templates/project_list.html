@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% load humanize %} {% block content %}
+<div class="container mt-5">
+  <h1>Project List</h1>
+  <div class="row">
+    {% for project in projects %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <p class="card-text">
+            Due Date: {{ project.due_date | date:"m-d-Y" }}
+          </p>
+          <h5 class="card-title">{{ project.title }}</h5>
+
+          <p class="card-text">
+            Total Tasks: {{ project.tasks.count }}
+          </p>
+
+          <p class="card-text">
+            Total Tasks: {{ project.tasks.count }}
+          </p>
+
+          <a
+            href="{% url 'project_detail' project_id=project.id %}"
+            class="btn btn-primary"
+            >View Project</a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Link to create a new project -->
+    <div class="col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <p class="card-text">
+            <em>Create a New Project</em>
+          </p>
+          <a href="{% url 'project_create' %}" class="btn btn-success"
+            >Create Project</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
