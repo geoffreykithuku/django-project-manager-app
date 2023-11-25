@@ -1,5 +1,10 @@
-{% extends 'base.html' %} {% load humanize %} {% block content %}
+{% extends 'base.html' %}
+ {% load humanize %}
+  {% block content %} 
+
+{% if project.owner == user %}
 <div class="container mt-3">
+  
   <h2 class="h3 text-primary font-weight-bold">{{ project.title }}</h2>
   <p class="font-weight-bold text-primary">
     Due Date: {{ project.due_date | date:"m-d-Y" }}
@@ -21,7 +26,12 @@
     <tbody>
       {% for task in tasks %}
       <tr>
+        {% if task.completed %}
+        <td class="text-decoration-line-through">{{ task.title }}</td>
+        {% else %}
         <td>{{ task.title }}</td>
+        {% endif %}
+
         <td>{{ task.due_date|date:"m-d-Y" }}</td>
         <td>{% if task.completed %}Yes{% else %}No{% endif %}</td>
         <td>
@@ -101,24 +111,52 @@
     </nav>
   </div>
 
- <!-- Modal for project deletion confirmation -->
-<div class="modal fade" id="deleteProjectModal" tabindex="-1" aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteProjectModalLabel">Confirm Deletion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete the project "{{ project.title }}"?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <a href="{% url 'project_delete' project_id=project.id %}" class="btn btn-danger">Delete Project</a>
+  <!-- Modal for project deletion confirmation -->
+  <div
+    class="modal fade"
+    id="deleteProjectModal"
+    tabindex="-1"
+    aria-labelledby="deleteProjectModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteProjectModalLabel">
+            Confirm Deletion
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Are you sure you want to delete the project "{{ project.title }}"?
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <a
+            href="{% url 'project_delete' project_id=project.id %}"
+            class="btn btn-danger"
+            >Delete Project</a
+          >
+        </div>
       </div>
     </div>
   </div>
 </div>
+{% else %}
+<p class="text-danger">You are not authorized to view this page.</p>
+{% endif %}
 
-</div>
 {% endblock %}
