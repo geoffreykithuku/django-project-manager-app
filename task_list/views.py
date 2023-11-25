@@ -1,5 +1,5 @@
 import datetime
-from django.http import HttpResponse
+
 from django.shortcuts import redirect, render
 
 from task_list.models import Task, Project

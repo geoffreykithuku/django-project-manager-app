@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django.contrib.humanize",
     'task_list',
+    'users'
 ]
 
 MIDDLEWARE = [
