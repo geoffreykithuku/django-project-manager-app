@@ -2,18 +2,20 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-6">
-      <h1 class="display-4 ">Welcome to Your Task Management App</h1>
+      <h1 class="display-4">Welcome to Your Task Management App</h1>
       <p>
         This is a powerful tool to manage your projects and tasks efficiently.
         You can create projects and tasks, assign tasks to projects, and mark
         tasks as complete.
       </p>
 
-      <a href="{% url 'project_list' %}" class="btn btn-primary">View Your Projects</a>
+      <a href="{% url 'project_list' %}" class="btn btn-primary"
+        >View Your Projects</a
+      >
     </div>
     <div class="col-md-6">
       <img
-        src="{% static 'images/home.jpg' %}"
+        src="https://cdn.pixabay.com/photo/2015/08/25/20/56/work-management-907669_640.jpg"
         alt="Task Management Image"
         class="img-fluid rounded shadow"
       />
