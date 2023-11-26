@@ -48,6 +48,7 @@ google-auth-httplib2==0.1.1
 google-auth-oauthlib==1.1.0
 googleapis-common-protos==1.61.0
 greenlet==1.1.2
+gunicorn==21.2.0
 h11==0.14.0
 httpagentparser==1.9.5
 httplib2==0.22.0
@@ -70,6 +71,7 @@ msal==1.25.0
 msal-extensions==1.0.0
 msrest==0.7.1
 oauthlib==3.2.2
+packaging==23.2
 paramiko==3.3.1
 passlib==1.7.4
 pgadmin4==8.0
