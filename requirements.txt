@@ -178,6 +178,8 @@ protobuf
 psutil
 psycopg  # Keep or remove this line based on your needs
 psycopg-binary
+psycopg2==2.9.9
+
 pyasn1
 pyasn1-modules
 pycparser
