@@ -88,7 +88,8 @@ def project_update(request, project_id):
     else:
         form = ProjectForm(instance=project)
         
-    return render(request, 'project_form.html', {'project': project, 'form': form} )
+    return render(request, 'project_edit.html', {'project': project} )
+
 @login_required
 def task_list(request, project_id):
     project = get_object_or_404(Project, pk=project_id)

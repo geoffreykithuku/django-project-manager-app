@@ -85,25 +85,25 @@ WSGI_APPLICATION = 'taskmanager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # connecting to postgresql database
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env("DJANGO_DB_NAME"),
-        'USER': env("DJANGO_DB_USER"),
-        'PASSWORD': env("DJANGO_DB_PASSWORD"),
-        'HOST': env("DJANGO_DB_HOST"),
-        'PORT': env("DJANGO_DB_PORT"),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env("DJANGO_DB_NAME"),
+#         'USER': env("DJANGO_DB_USER"),
+#         'PASSWORD': env("DJANGO_DB_PASSWORD"),
+#         'HOST': env("DJANGO_DB_HOST"),
+#         'PORT': env("DJANGO_DB_PORT"),
+#     }
+# }
 
 
 # Password validation
